@@ -1,4 +1,4 @@
-import { IProductRepository } from "../interfaces/puertos/IProductRepository";
+import { IProductRepository } from "../dominio/IProductRepository";
 
 export class FindAllProduct {
     constructor(private readonly repository: IProductRepository){}

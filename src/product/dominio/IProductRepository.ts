@@ -1,4 +1,4 @@
-import { Product } from "../../dominio/product";
+import { Product } from "./product";
 
 export interface IProductRepository {
     save(product: Product): Promise<Product>;

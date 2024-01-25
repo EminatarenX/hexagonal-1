@@ -1,4 +1,4 @@
-import { IProductRepository } from "../interfaces/puertos/IProductRepository";
+import { IProductRepository } from "../dominio/IProductRepository";
 import { Product } from "../dominio/product";
 
 export class CreateProduct {

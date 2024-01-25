@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { IUserRepository } from "../interfaces/puertos/IUserRepository";
+import { IUserRepository } from "../dominio/IUserRepository";
 import { User } from "../dominio/user";
 
 export class UserRepositoryPrisma implements IUserRepository {
@@ -13,16 +13,79 @@ export class UserRepositoryPrisma implements IUserRepository {
         const userSaved = await this.prisma.user.create({
             data: {
                 name: user.name,
-                lastName: user.lastName
+                email: user.email,
+                password: user.password
             }
         })
 
         return new User(
             userSaved.name,
-            userSaved.lastName,
+            userSaved.email,
+            userSaved.password,
             userSaved.id,
             userSaved.createdAt,
             userSaved.updatedAt
         );
+    }
+
+    async findById(id: string) : Promise<User | null> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: id
+            }
+        });
+
+        if(!user) {
+            return null;
+        }
+
+        return new User(
+            user.name,
+            user.email,
+            user.password,
+            user.id,
+            user.createdAt,
+            user.updatedAt
+        );
+    }
+
+    async update(user: User): Promise<User>{
+        const userUpdated = await this.prisma.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                name: user.name,
+            }
+        });
+
+        return new User(
+            userUpdated.name,
+            userUpdated.email,
+            userUpdated.password,
+            userUpdated.id,
+            userUpdated.createdAt,
+            userUpdated.updatedAt
+        );
+    }
+
+    async findByEmail(email: string): Promise<User | null> {
+        const exist = await this.prisma.user.findFirst({
+            where: {
+                email
+            }
+        })
+
+        if(!exist) {
+            return null;
+        }
+        return new User(
+            exist.name,
+            exist.email,
+            exist.password,
+            exist.id,
+            exist.createdAt,
+            exist.updatedAt
+        )
     }
 }
